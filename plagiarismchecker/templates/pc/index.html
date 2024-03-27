@@ -1,0 +1,132 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aplikasi Cek Plagiat</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Rubik:wght@700&family=Source+Code+Pro:wght@500&display=swap" rel="stylesheet">
+  <!-- Bootstrap core CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Material Design Bootstrap -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+  <link href="{% static 'pc/styles.css' %}" rel="stylesheet" type="text/css">
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'pc/favicon/apple-touch-icon.png' %}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'pc/favicon/favicon-32x32.png' %}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'pc/favicon/favicon-16x16.png' %}">
+  <link rel="manifest" href="{% static 'pc/favicon/site.webmanifest' %}">
+
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #165a72;">
+    <a class="navbar-brand" style="font-family: 'Rubik'; font-weight: bold;" href="{% url 'plagiarism-check-mainpage' %}">CEK PLAGIAT</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav" style="margin-left: 0;">
+        <li class="nav-item nav-one">
+          <a class="nav-link" style="font-family: 'Roboto'; font-weight: 500;" href="{% url 'plagiarism-check-mainpage' %}">Home <span
+              class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item nav-two">
+          <a class="nav-link" style="font-family: 'Roboto'; font-weight: 500;" href="{% url 'compare' %}">Bandingkan Dokumen</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container content-1">
+    <div class="col-md-6 offset-3 text-content">
+
+      <p>Pilih file atau masukkan teks untuk pencarian web!</p>
+      <div class="tab-content-1">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="text-tab" data-toggle="tab" href="#text-input-ws" role="tab"
+              aria-controls="text-input-ws" aria-selected="true" onclick="makeInvisible()">Teks</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="file-tab" data-toggle="tab" href="#file-input-ws" role="tab"
+              aria-controls="file-input-ws" aria-selected="false" onclick="makeVisible()">Unggah File</a>
+          </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active" id="text-input-ws" role="tabpanel" aria-labelledby="text-tab">
+           
+            <form id="form1-ws" action="/test/" method="POST">
+              {% csrf_token %}
+              <textarea id="text-1" name="q" required></textarea>
+                </form>
+
+          </div>
+          
+          <div class="tab-pane fade" id="file-input-ws" role="tabpanel" aria-labelledby="file-tab">
+            <form id="form2-ws" action="/filetest/" enctype="multipart/form-data" method="POST">
+            {% csrf_token %}
+            <input id="id_docfile" required type="file" name="docfile" />
+              </form>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-md-9">
+      <button type="submit" form="form1-ws" id="submit-button-1" class="btn" style="background-color: #1e7898;">Mulai</button>
+      <button type="submit" form="form2-ws" id="submit-button-2" class="btn submit-button-2" style="background-color: #1e7898;">Mulai</button>  
+      </div>  
+    </div>
+
+    <div class="container-fluid result-div">
+      <div class="row">
+        <div class="col-md-6 result-1" style="background-color: #92cbdf">
+          <h3>Hasil</h3>
+          <ul class="output-list-1" style="text-align: left">
+            {% for links in link %}            
+              <li>{{ links }}</li>
+            {% endfor %}
+      </div>
+
+      <div class="col-md-6 result-2" style="text-align: center; align-items: center;">
+        <p class="output-per-tot" style="border: 7px solid #7cc0d8;">{{ percent }}%</p>
+        <p>Terindikasi Plagiarisme</p>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function makeVisible() {
+      document.getElementById("submit-button-2").style.visibility = "visible";
+      document.getElementById("submit-button-1").style.visibility = "hidden";
+    }
+
+    function makeInvisible(){
+      document.getElementById("submit-button-2").style.visibility = "hidden";
+      document.getElementById("submit-button-1").style.visibility = "visible";
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+  <!-- JQuery -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+  <!-- MDB core JavaScript -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+</body>
+
+</html>
