@@ -1,7 +1,7 @@
 # Cek Plagiat
 
 Aplikasi cek plagiarisme menggunakan algoritma cosine
-Plagiarsim checker using cosine algorithm
+
 
 
 ## Gunakan command berikut!
