@@ -16,6 +16,6 @@ Plagiarsim checker using cosine algorithm
     <td>Cek Plagiat </td>
   </tr>
   <tr>
-    <td><img src="https://github.com/wreckitral/cek-plagiat-app-py/preview.png"></td>
+    <td><img src="https://github.com/wreckitral/cek-plagiat-app-py/blob/master/preview.png"></td>
   </tr>
  </table>
